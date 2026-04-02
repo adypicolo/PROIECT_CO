@@ -1,6 +1,8 @@
 # 📊 Cercetări Operaționale — Proiecte
 
 ![Python](https://img.shields.io/badge/Python-3.13-blue?logo=python)
+![NumPy](https://img.shields.io/badge/NumPy-013243?logo=numpy&logoColor=white)
+![customTkinter](https://img.shields.io/badge/customTkinter-1.6-lightgrey)
 
 > 🧠 Implementări practice pentru concepte fundamentale din **Cercetări Operaționale**  
 > 💡 Optimizare • Decizie • Strategie
