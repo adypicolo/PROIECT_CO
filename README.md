@@ -97,7 +97,7 @@ pip install -r requirements.txt
         <img src="https://github.com/biancaiionela" width="100" style="border-radius:50%"/><br/>
         <b>Tînjală Bianca-Ionela</b><br/>
         <a href="https://linkedin.com/in/biancaionelatinjala"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" width="18"/></a>
-        <a href="https://github.com/biancaiionela"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" width="18"/></a>
+        <a href="https://github.com/biancaiionela.png"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" width="18"/></a>
       </a>
     </td>
   </tr>
