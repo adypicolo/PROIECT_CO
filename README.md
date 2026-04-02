@@ -86,7 +86,7 @@ pip install -r requirements.txt
     </td>
     <td align="center">
       <a href="https://github.com/1adi13">
-        <img src="https://github.com/1adi13" width="100" style="border-radius:50%"/><br/>
+        <img src="https://github.com/1adi13.png" width="100" style="border-radius:50%"/><br/>
         <b>Stroescu Adrian-Gabriel</b><br/>
         <a href="https://linkedin.com/in/adrian-stroescu-5145a7357"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" width="18"/></a>
         <a href="https://github.com/1adi13"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" width="18"/></a>
