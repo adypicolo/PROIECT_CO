@@ -6,9 +6,7 @@ from copy import deepcopy
 from utils.conversie_Fractie import transformaraFractie
 from ui.tabel_Simplex import tabelSimplex
 
-# =====================================================================
-# 3. INTERFATA PRINCIPALA
-# =====================================================================
+# INTERFATA PRINCIPALA
 ctk.set_appearance_mode("light")
 
 class ecranPrincipal(ctk.CTk):
