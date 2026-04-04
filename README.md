@@ -1,6 +1,8 @@
 # 📊 Cercetări Operaționale — Proiecte
 
 ![Python](https://img.shields.io/badge/Python-3.13-blue?logo=python)
+![NumPy](https://img.shields.io/badge/NumPy-013243?logo=numpy&logoColor=white)
+![customTkinter](https://img.shields.io/badge/customTkinter-1.6-lightgrey)
 
 > 🧠 Implementări practice pentru concepte fundamentale din **Cercetări Operaționale**  
 > 💡 Optimizare • Decizie • Strategie
@@ -88,7 +90,7 @@ pip install -r requirements.txt
       <a href="https://github.com/1adi13">
         <img src="https://github.com/1adi13.png" width="100" style="border-radius:50%"/><br/>
         <b>Stroescu Adrian-Gabriel</b><br/>
-        <a href="https://linkedin.com/in/adrian-stroescu-5145a7357"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" width="18"/></a>
+        <a href="https://linkedin.com/in/adrian-gabriel-stroescu-5145a7357"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" width="18"/></a>
         <a href="https://github.com/1adi13"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" width="18"/></a>
       </a>
     </td>
