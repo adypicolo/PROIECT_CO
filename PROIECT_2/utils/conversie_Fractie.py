@@ -1,8 +1,6 @@
 from fractions import Fraction
 
-# =====================================================================
-# 1. UTILITARE: Conversie Fractie
-# =====================================================================
+#  Conversie Fractie
 def transformaraFractie(numar):
     if abs(numar) >= 10000:
         return "M" if numar > 0 else "-M"
