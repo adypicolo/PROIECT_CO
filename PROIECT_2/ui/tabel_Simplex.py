@@ -1,9 +1,7 @@
 import customtkinter as ctk
 from utils.conversie_Fractie import transformaraFractie
 
-# =====================================================================
-# 2. UI: Tabel Simplex
-# =====================================================================
+# Tabel Simplex
 class tabelSimplex(ctk.CTkFrame):
     def __init__(self, container, titlu, matrice, coloana_xb, costuri, deltas, baza, nume_variabile, pivot=None,
                  iteratie=0):
