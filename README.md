@@ -56,14 +56,16 @@ python3 main.py
 - ✔️ Modele de jocuri strategice
 - ✔️ Determinarea echilibrului **Nash**
 - ✔️ Analiza strategiilor mixte
-- ✔️ Rezolvarea jocurilor matriceale
+- ✔️ Rezolvarea jocurilor matriceale prin algortimul ASP
 
 ## 🚀 Cum rulezi proiectul?
 ```bash
 git clone https://github.com/adypicolo/PROIECT_CO
 cd PROIECT_CO/PROIECT_2
 pip install -r requirements.txt
+python3 main.py
 ```
+‼️Se instaleaza manual fonturile din fisierul PROIECT_2/poppins
 
 ---
 
