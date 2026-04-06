@@ -25,8 +25,6 @@ Vezi prezentarea proiectului aici:
 ### 🔹 Teoria Jocurilor
 <p align="center">
   <img src="docs/TJ_DEMO_1.png" width="49%"/>
-  <img src="docs/TJ_DEMO_2.png" width="49%"/>
-  <img src="docs/TJ_DEMO_3.png" width="49%"/>
   <img src="docs/TJ_DEMO_4.png" width="49%"/>
   <img src="docs/TJ_DEMO_5.png" width="49%"/>
 </p>
