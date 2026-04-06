@@ -23,7 +23,17 @@ Vezi prezentarea proiectului aici:
 [📊 DRAFT](docs/DRAFT_PL.pdf)
 
 ### 🔹 Teoria Jocurilor
+<p align="center">
+  <img src="docs/TJ_DEMO_1.png" width="49%"/>
+  <img src="docs/TJ_DEMO_2.png" width="49%"/>
+  <img src="docs/TJ_DEMO_3.png" width="49%"/>
+  <img src="docs/TJ_DEMO_4.png" width="49%"/>
+  <img src="docs/TJ_DEMO_5.png" width="49%"/>
+</p>
 
+Vezi prezentarea proiectului aici:  
+[📊 Prezentare Canva](https://canva.link/3kx9n6scb003j01)
+[📊 DRAFT](docs/DRAFT_TJ.pdf)
 ---
 
 ## 📚 Conținut
