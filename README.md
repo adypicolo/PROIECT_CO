@@ -52,7 +52,7 @@ python3 main.py
 ```
 ‼️Se instaleaza manual fontul ```Montserrat-VariableFont_wght.ttf``` din fisierul PROIECT_1
 
-### 🎮 2. Teoria Jocurilor [![Status](https://img.shields.io/badge/status-in%20progress-yellow)]
+### 🎮 2. Teoria Jocurilor [![Status](https://img.shields.io/badge/status-done-green)]
 - ✔️ Modele de jocuri strategice
 - ✔️ Determinarea echilibrului **Nash**
 - ✔️ Analiza strategiilor mixte
