@@ -32,6 +32,7 @@ Vezi prezentarea proiectului aici:
 Vezi prezentarea proiectului aici:  
 [📊 Prezentare Canva](https://canva.link/3kx9n6scb003j01)
 [📊 DRAFT](docs/DRAFT_TJ.pdf)
+
 ---
 
 ## 📚 Conținut
