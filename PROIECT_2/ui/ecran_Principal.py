@@ -6,21 +6,26 @@ from copy import deepcopy
 from utils.conversie_Fractie import transformaraFractie
 from ui.tabel_Simplex import tabelSimplex
 
-# =====================================================================
-# 3. INTERFATA PRINCIPALA
-# =====================================================================
-ctk.set_appearance_mode("light")
+# INTERFATA PRINCIPALA
+ctk.set_appearance_mode("dark")
 
 class ecranPrincipal(ctk.CTk):
     # seteaza iconita ferestrei
+
+    DARK_PURPLE = "#1c103c"
+    MEDIUM_PURPLE = "#5f2b6e"
+    LIGHT_MAGENTA = "#c95ea8"
+    WHITE = "#ffffff"
+
     def seteaza_iconita(self):
         self.iconbitmap("fsa.ico")
 
     def __init__(self):
+
         super().__init__()
         self.title("TEORIA JOCURILOR")
-        self.geometry("1050x850")
-        self.configure(fg_color="#dceeff")
+        self.geometry("950x700")
+        self.configure(fg_color= self.DARK_PURPLE)
 
         # incarcare iconita dupa pornire
         self.after(200, self.seteaza_iconita)
@@ -29,32 +34,33 @@ class ecranPrincipal(ctk.CTk):
         self.panou_config = ctk.CTkFrame(self, fg_color="transparent")
         self.panou_config.pack(pady=10, padx=20, fill="x")
 
-        ctk.CTkLabel(self.panou_config, text="Strategii A (linii):", font=("Montserrat", 12, "bold"),
-                     text_color="#294280").grid(row=0, column=0, padx=5)
-        self.input_m = ctk.CTkEntry(self.panou_config, width=80, border_color="#b9ddff", text_color="#294280")
+        ctk.CTkLabel(self.panou_config, text="Strategii A (linii):", font=("Poppins", 13),
+                     text_color=self.WHITE).grid(row=0, column=0, padx=5)
+        self.input_m = ctk.CTkEntry(self.panou_config, width=80, border_color=self.MEDIUM_PURPLE, text_color=self.WHITE, fg_color = "#4c2258", font=("Poppins", 13))
         self.input_m.grid(row=0, column=1, padx=5)
 
-        ctk.CTkLabel(self.panou_config, text="Strategii B (coloane):", font=("Montserrat", 12, "bold"),
-                     text_color="#294280").grid(row=0, column=2, padx=5)
-        self.input_n = ctk.CTkEntry(self.panou_config, width=80, border_color="#b9ddff", text_color="#294280")
+        ctk.CTkLabel(self.panou_config, text="Strategii B (coloane):", font=("Poppins", 13),
+                     text_color=self.WHITE).grid(row=0, column=2, padx=5)
+        self.input_n = ctk.CTkEntry(self.panou_config, width=80, border_color=self.MEDIUM_PURPLE, text_color=self.WHITE, fg_color = "#4c2258", font=("Poppins", 13))
         self.input_n.grid(row=0, column=3, padx=5)
 
         ctk.CTkButton(
             self.panou_config, text="GENERARE MATRICE Q",
-            font=("Montserrat", 12, "bold"), text_color="#ffffff",
-            fg_color="#5284ff", hover_color="#4a77e6", command=self.genereazaInput
+            font=("Poppins", 11, "bold"), text_color="#ffffff",
+            fg_color=self.LIGHT_MAGENTA, hover_color="#a14b86", command=self.genereazaInput
         ).grid(row=0, column=4, padx=20)
 
         # Zona pentru afisarea gridului de intrare al matricei Q
-        self.zona_date_intrare = ctk.CTkFrame(self, fg_color="#ffffff", corner_radius=10)
+        self.zona_date_intrare = ctk.CTkFrame(self, fg_color="#271c46", corner_radius=10)
         self.zona_date_intrare.pack(pady=10, padx=20, fill="x")
         self.grid_entries = []
 
         # Zona scrollabila pentru afisarea pasilor de rezolvare
         self.zona_rezolvare = ctk.CTkScrollableFrame(
             self, label_text="PASII DE REZOLVARE",
-            fg_color="#93c5f2", label_font=("Montserrat", 14, "bold"),
-            label_fg_color="#afd9ff", label_text_color="#ffffff"
+            fg_color="#160d2e", label_font=("Poppins", 13, "bold"),
+            label_fg_color=self.DARK_PURPLE, label_text_color="#ffffff",
+            scrollbar_button_color="#271c46", scrollbar_button_hover_color=self.DARK_PURPLE
         )
         self.zona_rezolvare.pack(pady=5, padx=20, fill="both", expand=True)
 
@@ -71,28 +77,28 @@ class ecranPrincipal(ctk.CTk):
         except ValueError:
             return
 
-        ctk.CTkLabel(self.zona_date_intrare, text="Matricea Q:", font=("Montserrat", 14, "bold"),
-                     text_color="#294280").pack(pady=10)
+        ctk.CTkLabel(self.zona_date_intrare, text="Matricea Q:", font=("Poppins", 13, "bold"),
+                     text_color=self.WHITE).pack(pady=10)
 
         grid_f = ctk.CTkFrame(self.zona_date_intrare, fg_color="transparent")
         grid_f.pack(pady=5)
 
         # Antet colt stanga sus si antetele coloanelor b1..bn
-        ctk.CTkLabel(grid_f, text="A \\ B", font=("Montserrat", 12, "bold"), text_color="#294280").grid(row=0, column=0,
+        ctk.CTkLabel(grid_f, text="A \\ B", font=("Poppins", 13, "bold"), text_color=self.WHITE).grid(row=0, column=0,
                                                                                                         padx=5, pady=5)
         for j in range(n):
-            ctk.CTkLabel(grid_f, text=f"b{j + 1}", font=("Montserrat", 12, "bold"), text_color="#294280").grid(row=0,
+            ctk.CTkLabel(grid_f, text=f"b{j + 1}", font=("Popins", 12), text_color=self.WHITE).grid(row=0,
                                                                                                                column=j + 1,
                                                                                                                padx=5,
                                                                                                                pady=5)
 
         # Genereaza randurile cu eticheta a1..am si campurile de intrare
         for i in range(m):
-            ctk.CTkLabel(grid_f, text=f"a{i + 1}", font=("Montserrat", 12, "bold"), text_color="#294280").grid(
+            ctk.CTkLabel(grid_f, text=f"a{i + 1}", font=("Poppins", 12), text_color=self.WHITE).grid(
                 row=i + 1, column=0, padx=5, pady=5)
             rand = []
             for j in range(n):
-                e = ctk.CTkEntry(grid_f, width=60, justify="center", border_color="#b9ddff", font=("Montserrat", 12))
+                e = ctk.CTkEntry(grid_f, width=60, justify="center", border_color=self.MEDIUM_PURPLE, text_color=self.WHITE, fg_color = "#4c2258", font=("Poppins", 13))
                 e.grid(row=i + 1, column=j + 1, padx=3, pady=3)
                 rand.append(e)
             self.grid_entries.append(rand)
@@ -100,63 +106,63 @@ class ecranPrincipal(ctk.CTk):
         # Butonul de rezolvare apare dupa generarea gridului
         self.buton_calcul = ctk.CTkButton(
             self.zona_date_intrare, text="REZOLVARE",
-            font=("Montserrat", 14, "bold"), text_color="#ffffff",
-            fg_color="#2ECC71", hover_color="#27ae60", command=self.ASP
+            font=("Poppins", 11, "bold"), text_color="#ffffff",
+            fg_color=self.LIGHT_MAGENTA, hover_color="#a14b86", command=self.ASP
         )
         self.buton_calcul.pack(pady=15)
 
     def afiseaza_analiza_matrice(self, Q, alpha, beta, v1, v2, punct_echilibru):
         # Cadrul principal pentru pasul 1 (analiza matricei)
         m, n = Q.shape
-        f_analiza = ctk.CTkFrame(self.zona_rezolvare, fg_color="#ffffff", border_width=2, border_color="#b9ddff",
+        f_analiza = ctk.CTkFrame(self.zona_rezolvare, fg_color="#4c2258", border_width=2, border_color=self.MEDIUM_PURPLE,
                                  corner_radius=8)
         f_analiza.pack(pady=10, padx=10, fill="x")
 
-        ctk.CTkLabel(f_analiza, text="PAS 1", font=("Montserrat", 14, "bold"),
-                     text_color="#294280").pack(pady=10)
+        ctk.CTkLabel(f_analiza, text="PAS 1", font=("Poppins", 13, "bold"),
+                     text_color=self.WHITE).pack(pady=10)
 
         grid_f = ctk.CTkFrame(f_analiza, fg_color="transparent")
         grid_f.pack(pady=5)
 
         # Antetul variabilelor y1..yn pentru matricea extinsa
         for j in range(n):
-            ctk.CTkLabel(grid_f, text=f"y{j + 1}", width=60, font=("Montserrat", 12, "bold"), fg_color="#e1ecf7",
-                         text_color="#294280").grid(row=0, column=j + 2, padx=2, pady=2)
+            ctk.CTkLabel(grid_f, text=f"y{j + 1}", width=60, font=("Poppins", 12, "bold"), fg_color=self.MEDIUM_PURPLE,
+                         text_color="#e4afd4").grid(row=0, column=j + 2, padx=2, pady=2)
 
-        ctk.CTkLabel(grid_f, text="A \\ B", width=60, font=("Montserrat", 12, "bold"), fg_color="#e1ecf7",
-                     text_color="#294280").grid(row=1, column=1, padx=2, pady=2)
+        ctk.CTkLabel(grid_f, text="A \\ B", width=60, font=("Poppins", 13, "bold"), fg_color=self.MEDIUM_PURPLE,
+                     text_color=self.WHITE).grid(row=1, column=1, padx=2, pady=2)
         for j in range(n):
-            ctk.CTkLabel(grid_f, text=f"b{j + 1}", width=60, font=("Montserrat", 12, "bold"), fg_color="#e1ecf7",
-                         text_color="#294280").grid(row=1, column=j + 2, padx=2, pady=2)
-        ctk.CTkLabel(grid_f, text="α (min)", width=60, font=("Montserrat", 12, "bold"), fg_color="#fce4e4",
-                     text_color="#e74c3c").grid(row=1, column=n + 2, padx=4, pady=2)
+            ctk.CTkLabel(grid_f, text=f"b{j + 1}", width=60, font=("Poppins", 12), fg_color=self.MEDIUM_PURPLE,
+                         text_color="#e4afd4").grid(row=1, column=j + 2, padx=2, pady=2)
+        ctk.CTkLabel(grid_f, text="α (min)", width=60, font=("Poppins", 12, "bold"), fg_color=self.LIGHT_MAGENTA,
+                     text_color="#e4afd4").grid(row=1, column=n + 2, padx=4, pady=2)
 
         # Afiseaza fiecare rand al matricei Q cu minimul pe linie (alpha)
         for i in range(m):
-            ctk.CTkLabel(grid_f, text=f"x{i + 1}", width=60, font=("Montserrat", 12, "bold"), fg_color="#e1ecf7",
-                         text_color="#294280").grid(row=i + 2, column=0, padx=2, pady=2)
-            ctk.CTkLabel(grid_f, text=f"a{i + 1}", width=60, font=("Montserrat", 12, "bold"), fg_color="#e1ecf7",
-                         text_color="#294280").grid(row=i + 2, column=1, padx=2, pady=2)
+            ctk.CTkLabel(grid_f, text=f"x{i + 1}", width=60, font=("Poppins", 12, "bold"), fg_color=self.MEDIUM_PURPLE,
+                         text_color="#e4afd4").grid(row=i + 2, column=0, padx=2, pady=2)
+            ctk.CTkLabel(grid_f, text=f"a{i + 1}", width=60, font=("Poppins", 12), fg_color=self.MEDIUM_PURPLE,
+                         text_color="#e4afd4").grid(row=i + 2, column=1, padx=2, pady=2)
 
             for j in range(n):
                 val = Q[i, j]
                 txt = f"{int(val)}" if val.is_integer() else f"{val:.2f}"
-                ctk.CTkLabel(grid_f, text=txt, width=60, font=("Montserrat", 12, "bold"), fg_color="#f0f5fa",
-                             text_color="#294280").grid(row=i + 2, column=j + 2, padx=2, pady=2)
+                ctk.CTkLabel(grid_f, text=txt, width=60, font=("Poppins", 12), fg_color=self.MEDIUM_PURPLE,
+                             text_color=self.WHITE).grid(row=i + 2, column=j + 2, padx=2, pady=2)
 
             a_val = alpha[i]
             a_txt = f"{int(a_val)}" if a_val.is_integer() else f"{a_val:.2f}"
-            ctk.CTkLabel(grid_f, text=a_txt, width=60, font=("Montserrat", 12, "bold"), fg_color="#fce4e4",
-                         text_color="#e74c3c").grid(row=i + 2, column=n + 2, padx=4, pady=2)
+            ctk.CTkLabel(grid_f, text=a_txt, width=60, font=("Poppins", 12, "bold"), fg_color=self.LIGHT_MAGENTA,
+                         text_color=self.WHITE).grid(row=i + 2, column=n + 2, padx=4, pady=2)
 
         # Afiseaza maximul pe coloana (beta) pe ultimul rand
-        ctk.CTkLabel(grid_f, text="β (max)", width=60, font=("Montserrat", 12, "bold"), fg_color="#e3f2fd",
-                     text_color="#1976d2").grid(row=m + 2, column=1, padx=2, pady=4)
+        ctk.CTkLabel(grid_f, text="β (max)", width=60, font=("Poppins", 12, "bold"), fg_color=self.LIGHT_MAGENTA,
+                     text_color="#e4afd4").grid(row=m + 2, column=1, padx=2, pady=4)
         for j in range(n):
             b_val = beta[j]
             b_txt = f"{int(b_val)}" if b_val.is_integer() else f"{b_val:.2f}"
-            ctk.CTkLabel(grid_f, text=b_txt, width=60, font=("Montserrat", 12, "bold"), fg_color="#e3f2fd",
-                         text_color="#1976d2").grid(row=m + 2, column=j + 2, padx=2, pady=4)
+            ctk.CTkLabel(grid_f, text=b_txt, width=60, font=("Poppins", 12, "bold"), fg_color=self.LIGHT_MAGENTA,
+                         text_color=self.WHITE).grid(row=m + 2, column=j + 2, padx=2, pady=4)
 
         # Construieste textul de concluzie cu v1, v2 si tipul cazului
         str_alpha = ", ".join([transformaraFractie(a) for a in alpha])
@@ -170,17 +176,17 @@ class ecranPrincipal(ctk.CTk):
         else:
             concluzie += "CAZ 2: v1 ≠ v2. Nu există punct 'șa'.\nImpartim in problema in PLA si PLB."
 
-        ctk.CTkLabel(f_analiza, text=concluzie, font=("Montserrat", 13, "bold"),
-                     text_color="#e74c3c" if not punct_echilibru else "#2ECC71", justify="left").pack(pady=10)
+        ctk.CTkLabel(f_analiza, text=concluzie, font=("Poppins", 13),
+                     text_color=self.WHITE if not punct_echilibru else self.LIGHT_MAGENTA, justify="left").pack(pady=10)
 
     def afiseaza_formulare_PL(self, Q, m, n):
         # Cadrul pentru pasul 2 - formularea problemelor PLA si PLB
-        cadru_pl = ctk.CTkFrame(self.zona_rezolvare, fg_color="#ffffff", border_width=2, border_color="#b9ddff",
+        cadru_pl = ctk.CTkFrame(self.zona_rezolvare, fg_color="#4c2258", border_width=2, border_color=self.MEDIUM_PURPLE,
                                 corner_radius=8)
         cadru_pl.pack(pady=10, padx=10, fill="x")
 
-        ctk.CTkLabel(cadru_pl, text="PAS 2", font=("Montserrat", 14, "bold"),
-                     text_color="#294280").pack(pady=10)
+        ctk.CTkLabel(cadru_pl, text="PAS 2", font=("Poppins", 13, "bold"),
+                     text_color=self.WHITE).pack(pady=10)
 
         containere = ctk.CTkFrame(cadru_pl, fg_color="transparent")
         containere.pack(fill="x", padx=10, pady=5)
@@ -188,12 +194,12 @@ class ecranPrincipal(ctk.CTk):
         containere.grid_columnconfigure(1, weight=1)
 
         # Panoul PLA (minimizare)
-        f_pla = ctk.CTkFrame(containere, fg_color="#fce4e4", corner_radius=8)
+        f_pla = ctk.CTkFrame(containere, fg_color="transparent", corner_radius=8)
         f_pla.grid(row=0, column=0, padx=5, sticky="nsew")
-        ctk.CTkLabel(f_pla, text="PLA", font=("Montserrat", 13, "bold"),
-                     text_color="#e74c3c").pack(pady=10)
+        ctk.CTkLabel(f_pla, text="PLA", font=("Poppins", 13, "bold"),
+                     text_color="#e4afd4").pack(pady=10)
         obj_a = "min f(x) = " + " + ".join([f"x{i + 1}" for i in range(m)])
-        ctk.CTkLabel(f_pla, text=obj_a, font=("Montserrat", 13, "bold"), text_color="#294280").pack(pady=2)
+        ctk.CTkLabel(f_pla, text=obj_a, font=("Poppins", 13, "bold"), text_color=self.WHITE).pack(pady=2)
 
         # Restrictiile PLA: suma pe coloana j >= 1
         for j in range(n):
@@ -202,17 +208,17 @@ class ecranPrincipal(ctk.CTk):
                 val = Q[i, j]
                 termeni.append(f"{transformaraFractie(val)}x{i + 1}" if val != 1 else f"x{i + 1}")
             restr = " + ".join(termeni).replace("+ -", "- ") + " ≥ 1"
-            ctk.CTkLabel(f_pla, text=restr, font=("Montserrat", 12), text_color="#294280").pack(pady=1)
+            ctk.CTkLabel(f_pla, text=restr, font=("Poppins", 12), text_color=self.WHITE).pack(pady=1)
         ctk.CTkLabel(f_pla, text=", ".join([f"x{i + 1}" for i in range(m)]) + " ≥ 0",
-                     font=("Montserrat", 12, "italic"), text_color="#294280").pack(pady=10)
+                     font=("Poppins", 12, "italic"), text_color=self.WHITE).pack(pady=10)
 
         # Panoul PLB (maximizare)
-        f_plb = ctk.CTkFrame(containere, fg_color="#e3f2fd", corner_radius=8)
+        f_plb = ctk.CTkFrame(containere, fg_color=self.MEDIUM_PURPLE, corner_radius=8, border_width=2, border_color=self.MEDIUM_PURPLE)
         f_plb.grid(row=0, column=1, padx=5, sticky="nsew")
-        ctk.CTkLabel(f_plb, text="PLB", font=("Montserrat", 13, "bold"),
-                     text_color="#1976d2").pack(pady=10)
+        ctk.CTkLabel(f_plb, text="PLB", font=("Poppins", 13, "bold"),
+                     text_color="#e4afd4").pack(pady=10)
         obj_b = "max g(y) = " + " + ".join([f"y{j + 1}" for j in range(n)])
-        ctk.CTkLabel(f_plb, text=obj_b, font=("Montserrat", 13, "bold"), text_color="#294280").pack(pady=2)
+        ctk.CTkLabel(f_plb, text=obj_b, font=("Poppins", 13, "bold"), text_color=self.WHITE).pack(pady=2)
 
         # Restrictiile PLB: suma pe linie i <= 1
         for i in range(m):
@@ -221,9 +227,9 @@ class ecranPrincipal(ctk.CTk):
                 val = Q[i, j]
                 termeni.append(f"{transformaraFractie(val)}y{j + 1}" if val != 1 else f"y{j + 1}")
             restr = " + ".join(termeni).replace("+ -", "- ") + " ≤ 1"
-            ctk.CTkLabel(f_plb, text=restr, font=("Montserrat", 12), text_color="#294280").pack(pady=1)
+            ctk.CTkLabel(f_plb, text=restr, font=("Poppins", 12), text_color=self.WHITE).pack(pady=1)
         ctk.CTkLabel(f_plb, text=", ".join([f"y{j + 1}" for j in range(n)]) + " ≥ 0",
-                     font=("Montserrat", 12, "italic"), text_color="#294280").pack(pady=10)
+                     font=("Poppins", 12, "italic"), text_color=self.WHITE).pack(pady=10)
 
     def ASP(self):
         # Sterge rezultatele anterioare din zona de rezolvare
@@ -343,12 +349,12 @@ class ecranPrincipal(ctk.CTk):
 
     def afiseaza_rezultat_final(self, v, X_opt, Y_opt, Q, x_stea, y_stea, shift, v_transf, v1, v2):
         # Cadrul principal al solutiei finale
-        cadru_final = ctk.CTkFrame(self.zona_rezolvare, border_width=2, border_color="#2ECC71", fg_color="#ffffff",
+        cadru_final = ctk.CTkFrame(self.zona_rezolvare, fg_color="#4c2258", border_width=2, border_color=self.MEDIUM_PURPLE,
                                    corner_radius=8)
         cadru_final.pack(pady=15, padx=10, fill="x")
 
-        ctk.CTkLabel(cadru_final, text="SOLUTIA FINALA", font=("Montserrat", 16, "bold"),
-                     text_color="#27ae60").pack(pady=10, anchor="center")
+        ctk.CTkLabel(cadru_final, text="SOLUTIA FINALA", font=("Poppins", 14, "bold"),
+                     text_color=self.WHITE).pack(pady=10, anchor="center")
 
         # Construieste textul pentru valoarea jocului V
         str_v1 = transformaraFractie(v1)
@@ -361,7 +367,7 @@ class ecranPrincipal(ctk.CTk):
         else:
             txt_v = f"• V' = 1 / g_max = {str_v_transf}  =>  V = V' - k = {str_v_transf} - {shift} = {str_v}  ∈ [{str_v1}, {str_v2}]"
 
-        ctk.CTkLabel(cadru_final, text=txt_v, font=("Montserrat", 14, "bold"), text_color="#d32f2f").pack(anchor="w",
+        ctk.CTkLabel(cadru_final, text=txt_v, font=("Poppins", 13), text_color=self.WHITE).pack(anchor="w",
                                                                                                           padx=20,
                                                                                                           pady=5)
 
@@ -372,7 +378,7 @@ class ecranPrincipal(ctk.CTk):
         str_sum_x = " + ".join(fractii_x) if fractii_x else "0"
 
         txt_x = f"• X^0 = v · X_A = {str_v_transf} · {str_XA} = {str_X0}   =>   ∑X^0 = {str_sum_x} = 1 ✓"
-        ctk.CTkLabel(cadru_final, text=txt_x, font=("Montserrat", 13, "bold"), text_color="#294280").pack(anchor="w",
+        ctk.CTkLabel(cadru_final, text=txt_x, font=("Poppins", 13), text_color=self.WHITE).pack(anchor="w",
                                                                                                           padx=20,
                                                                                                           pady=5)
 
@@ -383,25 +389,25 @@ class ecranPrincipal(ctk.CTk):
         str_sum_y = " + ".join(fractii_y) if fractii_y else "0"
 
         txt_y = f"• y^0 = v · Y_B = {str_v_transf} · {str_YB} = {str_Y0}   =>   ∑y^0 = {str_sum_y} = 1 ✓"
-        ctk.CTkLabel(cadru_final, text=txt_y, font=("Montserrat", 13, "bold"), text_color="#294280").pack(anchor="w",
+        ctk.CTkLabel(cadru_final, text=txt_y, font=("Poppins", 13), text_color=self.WHITE).pack(anchor="w",
                                                                                                           padx=20,
                                                                                                           pady=5)
 
         # Butonul de verificare deschide fereastra popup cu calculul X*Q*Y=V
         btn_verificare = ctk.CTkButton(
             cadru_final, text="VERIFICA REZULTATUL",
-            font=("Montserrat", 14, "bold"), text_color="#ffffff",
-            fg_color="#3498db", hover_color="#2980b9",
+            font=("Poppins", 11, "bold"), text_color="#ffffff",
+            fg_color=self.LIGHT_MAGENTA, hover_color="#a14b86",
             command=lambda: self.arata_fereastra_verificare(X_opt, Y_opt, v, Q)
         )
         btn_verificare.pack(pady=15)
 
     def creare_matrice_ui(self, parent, matrice_2d):
         # Deseneaza o matrice 2D ca grid de etichete intr-un cadru
-        frm = ctk.CTkFrame(parent, fg_color="#f0f5fa", border_width=2, border_color="#9bcfff", corner_radius=0)
+        frm = ctk.CTkFrame(parent, fg_color=self.DARK_PURPLE, border_width=2, border_color="#160d2e", corner_radius=8)
         for i, rand in enumerate(matrice_2d):
             for j, val in enumerate(rand):
-                ctk.CTkLabel(frm, text=str(val), font=("Montserrat", 13, "bold"), text_color="#294280").grid(row=i,
+                ctk.CTkLabel(frm, text=str(val), font=("Poppins", 13, "bold"), text_color=self.WHITE).grid(row=i,
                                                                                                              column=j,
                                                                                                              padx=6,
                                                                                                              pady=2)
@@ -411,68 +417,68 @@ class ecranPrincipal(ctk.CTk):
         # Deschide fereastra popup pentru verificarea solutiei
         fer = ctk.CTkToplevel(self)
         fer.title("VERIFICAREA SOLUTIEI")
-        fer.geometry("850x650")
-        fer.configure(fg_color="#ffffff")
+        fer.geometry("600x600")
+        fer.configure(fg_color= self.DARK_PURPLE)
         fer.grab_set()
 
         # incarcare iconita dupa pornire
         fer.after(200, lambda: fer.iconbitmap("fsa.ico"))
 
-        scroll = ctk.CTkScrollableFrame(fer, fg_color="transparent")
+        scroll = ctk.CTkScrollableFrame(fer, fg_color="transparent", scrollbar_button_color="#271c46", scrollbar_button_hover_color="#271c46")
         scroll.pack(fill="both", expand=True)
 
-        ctk.CTkLabel(scroll, text="VERIFICAREA SOLUTIEI", font=("Montserrat", 16, "bold"),
-                     text_color="#294280").pack(pady=15)
+        ctk.CTkLabel(scroll, text="VERIFICAREA SOLUTIEI", font=("Poppins", 14, "bold"),
+                     text_color=self.WHITE).pack(pady=15)
 
         sum_x = sum(X_opt)
         sum_y = sum(Y_opt)
 
         # Cadrul pentru verificarea matriciala X * Q * Y = V
-        f_math = ctk.CTkFrame(scroll, fg_color="#ffffff", border_width=2, border_color="#b9ddff", corner_radius=8)
+        f_math = ctk.CTkFrame(scroll, fg_color="#271c46", border_width=2, border_color="#160d2e", corner_radius=8)
         f_math.pack(pady=10, padx=20, fill="x")
 
-        ctk.CTkLabel(f_math, text="3. Verificare: X⁰ · Q · y⁰ = V", font=("Montserrat", 13, "bold"),
-                     text_color="#294280").pack(anchor="w", padx=10, pady=(10, 5))
+        ctk.CTkLabel(f_math, text="3. Verificare: X⁰ · Q · y⁰ = V", font=("Poppins", 13),
+                     text_color=self.WHITE).pack(anchor="w", padx=10, pady=(10, 5))
 
         # Randul 1: afiseaza X, Q, y si valoarea V asteptata
         f_r1 = ctk.CTkFrame(f_math, fg_color="transparent")
         f_r1.pack(anchor="w", pady=5, padx=10)
 
-        ctk.CTkLabel(f_r1, text="X⁰·Q·y⁰ ≟ V   =>   ", font=("Montserrat", 14, "bold"), text_color="#294280").pack(
+        ctk.CTkLabel(f_r1, text="X⁰·Q·y⁰ ≟ V   =>   ", font=("Poppins", 13), text_color=self.WHITE).pack(
             side="left")
 
         mat_x = [[transformaraFractie(x) for x in X_opt]]
         self.creare_matrice_ui(f_r1, mat_x).pack(side="left", padx=5)
 
-        ctk.CTkLabel(f_r1, text=" · ", font=("Montserrat", 14, "bold"), text_color="#294280").pack(side="left")
+        ctk.CTkLabel(f_r1, text=" · ", font=("Poppins", 14, "bold"), text_color=self.WHITE).pack(side="left")
 
         mat_q = [[transformaraFractie(Q[i, j]) for j in range(len(Q[0]))] for i in range(len(Q))]
         self.creare_matrice_ui(f_r1, mat_q).pack(side="left", padx=5)
 
-        ctk.CTkLabel(f_r1, text=" · ", font=("Montserrat", 14, "bold"), text_color="#294280").pack(side="left")
+        ctk.CTkLabel(f_r1, text=" · ", font=("Poppins", 14, "bold"), text_color=self.WHITE).pack(side="left")
 
         mat_y = [[transformaraFractie(y)] for y in Y_opt]
         self.creare_matrice_ui(f_r1, mat_y).pack(side="left", padx=5)
 
-        ctk.CTkLabel(f_r1, text=f" ≟ {transformaraFractie(v)}", font=("Montserrat", 14, "bold"),
-                     text_color="#d32f2f").pack(side="left")
+        ctk.CTkLabel(f_r1, text=f" ≟ {transformaraFractie(v)}", font=("Poppins", 14, "bold"),
+                     text_color=self.WHITE).pack(side="left")
 
         # Randul 2: afiseaza produsul intermediar X*Q inmultit cu y
         f_r2 = ctk.CTkFrame(f_math, fg_color="transparent")
         f_r2.pack(anchor="w", pady=5, padx=10)
 
-        ctk.CTkLabel(f_r2, text="=>   ", font=("Montserrat", 14, "bold"), text_color="#294280").pack(side="left",
+        ctk.CTkLabel(f_r2, text="=>   ", font=("Poppins", 14, "bold"), text_color=self.WHITE).pack(side="left",
                                                                                                      padx=(190, 0))
 
         X_Q = np.dot(X_opt, Q)
         mat_xq = [[transformaraFractie(xq) for xq in X_Q]]
         self.creare_matrice_ui(f_r2, mat_xq).pack(side="left", padx=5)
 
-        ctk.CTkLabel(f_r2, text=" · ", font=("Montserrat", 14, "bold"), text_color="#294280").pack(side="left")
+        ctk.CTkLabel(f_r2, text=" · ", font=("Poppins", 14, "bold"), text_color=self.WHITE).pack(side="left")
         self.creare_matrice_ui(f_r2, mat_y).pack(side="left", padx=5)
 
-        ctk.CTkLabel(f_r2, text=f" = {transformaraFractie(v)}", font=("Montserrat", 14, "bold"),
-                     text_color="#d32f2f").pack(side="left")
+        ctk.CTkLabel(f_r2, text=f" = {transformaraFractie(v)}", font=("Poppins", 14, "bold"),
+                     text_color=self.WHITE).pack(side="left")
 
         # Randul 3: suma termenilor si comparatia cu V
         f_r3 = ctk.CTkFrame(f_math, fg_color="transparent")
@@ -483,28 +489,28 @@ class ecranPrincipal(ctk.CTk):
                         Y_opt[i] != 0 and X_Q[i] != 0]
         str_suma = " + ".join(termeni_suma) if termeni_suma else "0"
 
-        ctk.CTkLabel(f_r3, text="=>   ", font=("Montserrat", 14, "bold"), text_color="#294280").pack(side="left",
+        ctk.CTkLabel(f_r3, text="=>   ", font=("Poppins", 14, "bold"), text_color=self.WHITE).pack(side="left",
                                                                                                      padx=(190, 0))
-        ctk.CTkLabel(f_r3, text=f"{str_suma} = {transformaraFractie(val_finala)}", font=("Montserrat", 14, "bold"),
-                     text_color="#27ae60").pack(side="left")
+        ctk.CTkLabel(f_r3, text=f"{str_suma} = {transformaraFractie(val_finala)}", font=("Poppins", 14, "bold"),
+                     text_color=self.WHITE).pack(side="left")
         ctk.CTkLabel(f_r3, text=f"   =>   {transformaraFractie(val_finala)} = {transformaraFractie(v)} (A)",
-                     font=("Montserrat", 14, "bold"), text_color="#27ae60").pack(side="left")
+                     font=("Poppins", 14, "bold"), text_color=self.WHITE).pack(side="left")
 
         # Valideaza ca sumele strategiilor sunt 1 si ca X*Q*Y = V
         is_valid = abs(float(sum_x) - 1.0) < 1e-4 and abs(float(sum_y) - 1.0) < 1e-4 and abs(
             val_finala - float(v)) < 1e-4
 
         # Afiseaza rezultatul verificarii cu culoare corespunzatoare
-        f_rez = ctk.CTkFrame(scroll, fg_color="#e8f8f5" if is_valid else "#fdedec", border_width=2,
+        f_rez = ctk.CTkFrame(scroll, fg_color="#271c46" if is_valid else "#271c46", border_width=2,
                              border_color="#2ecc71" if is_valid else "#e74c3c")
         f_rez.pack(pady=15, padx=20, fill="x")
 
         if is_valid:
             ctk.CTkLabel(f_rez,
                          text="Verificarea a fost realizata cu succes!\nX·Q·Y = V (Adevarat)",
-                         font=("Montserrat", 12, "bold"), text_color="#27ae60", justify="center").pack(pady=10)
+                         font=("Poppins", 12, "bold"), text_color="#27ae60", justify="center").pack(pady=10)
         else:
-            ctk.CTkLabel(f_rez, text="Solutia nu este verificata.", font=("Montserrat", 12, "bold"),
+            ctk.CTkLabel(f_rez, text="Solutia nu este verificata.", font=("Poppins", 12, "bold"),
                          text_color="#e74c3c", justify="center").pack(pady=10)
 
 
