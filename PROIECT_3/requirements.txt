@@ -1,0 +1,4 @@
+customtkinter==5.2.2
+darkdetect==0.8.0
+numpy==2.4.3
+packaging==26.0
