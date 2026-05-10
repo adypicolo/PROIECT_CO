@@ -1,11 +1,5 @@
 from __future__ import annotations
 
-
-SURSA_IMPLICITA = "x1"
-DESTINATIE_IMPLICITA = "x2"
-NUMAR_NODURI_IMPLICIT = 6
-NUMAR_ARCE_IMPLICIT = 7
-
 DECALAJE_ETICHETE_GENERALE = [-22, -10, 12, 24, -30, 30]
 
 EXEMPLU_SEMINAR_NODURI = [f"x{i}" for i in range(1, 11)]

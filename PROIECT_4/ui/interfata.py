@@ -7,7 +7,6 @@ from tkinter import filedialog, messagebox
 import customtkinter as ctk
 
 from ..algoritmi.algoritm_ford_fulkerson import ruleaza_ford_fulkerson
-from ..algoritmi.algoritm_seminar import ruleaza_mod_seminar
 from ..configurare.constante import (
     DEFINITII_ARCE_SEMINAR,
     EXEMPLU_SEMINAR_DESTINATIA,
@@ -22,7 +21,7 @@ from ..grafuri.graf_date import (
     valideaza_numar_intreg,
 )
 from ..modele.modele import Graf, PasAlgoritm, RezultatRulare
-from ..configurare.stil import DIMENSIUNI, FONTURI, PALETA_LUMINOASA, VITEZE_ANIMATIE
+from ..configurare.stil import DIMENSIUNI, FONTURI, PALETA_LUMINOASA
 
 
 class AplicatieFordFulkerson(ctk.CTk):
@@ -43,7 +42,6 @@ class AplicatieFordFulkerson(ctk.CTk):
         self.graf_curent: Graf | None = None
         self.rezultat_curent: RezultatRulare | None = None
         self.index_pas_curent = 0
-        self.animatie_programata: str | None = None
         self.redesenare_programata: str | None = None
         self.actualizare_layout_programata: str | None = None
         self.inaltime_explicatii_curenta = 160
@@ -51,7 +49,6 @@ class AplicatieFordFulkerson(ctk.CTk):
         self.text_verificare_finala = ""
         self.noduri_curente: list[str] = []
         self.linii_arce: list[dict[str, object]] = []
-        self.mod_seminar_disponibil = False
 
         ctk.set_appearance_mode("light")
         self.configure(fg_color=self.paleta["fundal"])
@@ -443,7 +440,6 @@ class AplicatieFordFulkerson(ctk.CTk):
         self.afiseaza_pas_curent()
 
     def genereaza_formular_retea(self) -> None:
-        self.opreste_animatia()
         try:
             numar_noduri = valideaza_numar_intreg(self.numar_noduri_var.get(), "numar noduri", 2)
             numar_arce = valideaza_numar_intreg(self.numar_arce_var.get(), "numar arce", 1)
@@ -456,7 +452,6 @@ class AplicatieFordFulkerson(ctk.CTk):
         self.destinatie_var.set(self.noduri_curente[-1])
         self.selector_sursa.configure(values=self.noduri_curente)
         self.selector_destinatie.configure(values=self.noduri_curente)
-        self.mod_seminar_disponibil = False
         self.text_verificare_finala = ""
         self.buton_verificare_finala.configure(state="disabled")
         self._reface_tabel_arce(numar_arce)
@@ -560,7 +555,6 @@ class AplicatieFordFulkerson(ctk.CTk):
         return date_arce
 
     def construieste_graf_din_input(self) -> None:
-        self.opreste_animatia()
         if not self.noduri_curente:
             self.genereaza_formular_retea()
             if not self.noduri_curente:
@@ -580,7 +574,6 @@ class AplicatieFordFulkerson(ctk.CTk):
 
         self.rezultat_curent = None
         self.index_pas_curent = 0
-        self.mod_seminar_disponibil = False
         self.text_verificare_finala = ""
         self.buton_verificare_finala.configure(state="disabled")
         self.rezultat_var.set("Flux maxim: -")
@@ -594,7 +587,6 @@ class AplicatieFordFulkerson(ctk.CTk):
         )
 
     def incarca_exemplu_seminar(self) -> None:
-        self.opreste_animatia()
         self.noduri_curente = list(EXEMPLU_SEMINAR_NODURI)
         self.numar_noduri_var.set(str(len(EXEMPLU_SEMINAR_NODURI)))
         self.numar_arce_var.set(str(len(DEFINITII_ARCE_SEMINAR)))
@@ -621,7 +613,6 @@ class AplicatieFordFulkerson(ctk.CTk):
             arce_exemplu=DEFINITII_ARCE_SEMINAR,
             titlu="Exemplu seminar - retea preincarcata",
         )
-        self.mod_seminar_disponibil = True
         self.rezultat_curent = None
         self.index_pas_curent = 0
         self.text_verificare_finala = ""
@@ -645,7 +636,6 @@ class AplicatieFordFulkerson(ctk.CTk):
         deseneaza_graf(self.canvas_graf, self.graf_curent, pas_gol, self.paleta)
 
     def ruleaza_automat(self) -> None:
-        self.opreste_animatia()
         self.construieste_graf_din_input()
         if self.graf_curent is None:
             return
@@ -654,21 +644,6 @@ class AplicatieFordFulkerson(ctk.CTk):
         self._pregateste_verificare_finala()
         self.rezultat_var.set(f"Flux maxim: {self.rezultat_curent.flux_maxim}")
         self.status_var.set("Mod automat activ: reteaua este rezolvata general cu BFS in graful rezidual.")
-        self.afiseaza_pas_curent()
-
-    def ruleaza_seminar(self) -> None:
-        self.opreste_animatia()
-        if not self.mod_seminar_disponibil or self.graf_curent is None:
-            messagebox.showinfo(
-                "Mod seminar indisponibil",
-                "Modul seminar ramane disponibil doar dupa incarcarea exemplului de seminar.",
-            )
-            return
-        self.rezultat_curent = ruleaza_mod_seminar(self.graf_curent)
-        self.index_pas_curent = 0
-        self._pregateste_verificare_finala()
-        self.rezultat_var.set(f"Flux maxim: {self.rezultat_curent.flux_maxim}")
-        self.status_var.set("Mod seminar activ: demonstratia ghidata este afisata separat de modul automat.")
         self.afiseaza_pas_curent()
 
     def afiseaza_pas_curent(self) -> None:
@@ -691,7 +666,6 @@ class AplicatieFordFulkerson(ctk.CTk):
         self.text_explicatii.configure(state="disabled")
 
     def pas_inainte(self) -> None:
-        self.opreste_animatia()
         if self.rezultat_curent is None:
             self.scrie_explicatii("Nu exista pasi salvati. Ruleaza mai intai unul dintre moduri.")
             return
@@ -700,7 +674,6 @@ class AplicatieFordFulkerson(ctk.CTk):
             self.afiseaza_pas_curent()
 
     def pas_inapoi(self) -> None:
-        self.opreste_animatia()
         if self.rezultat_curent is None:
             self.scrie_explicatii("Nu exista pasi salvati. Ruleaza mai intai unul dintre moduri.")
             return
@@ -708,30 +681,7 @@ class AplicatieFordFulkerson(ctk.CTk):
             self.index_pas_curent -= 1
             self.afiseaza_pas_curent()
 
-    def ruleaza_animat(self) -> None:
-        if self.rezultat_curent is None:
-            self.scrie_explicatii("Nu exista pasi de animat. Ruleaza mai intai o metoda.")
-            return
-        self.opreste_animatia()
-        self._pas_animat()
-
-    def _pas_animat(self) -> None:
-        self.afiseaza_pas_curent()
-        if self.rezultat_curent is None:
-            return
-        if self.index_pas_curent >= len(self.rezultat_curent.pasi) - 1:
-            self.animatie_programata = None
-            return
-        self.index_pas_curent += 1
-        self.animatie_programata = self.after(VITEZE_ANIMATIE["Mediu"], self._pas_animat)
-
-    def opreste_animatia(self) -> None:
-        if self.animatie_programata is not None:
-            self.after_cancel(self.animatie_programata)
-            self.animatie_programata = None
-
     def reseteaza_stare(self) -> None:
-        self.opreste_animatia()
         self.rezultat_curent = None
         self.index_pas_curent = 0
         self.text_verificare_finala = ""
@@ -785,30 +735,6 @@ class AplicatieFordFulkerson(ctk.CTk):
         with open(cale, "w", encoding="utf-8") as fisier:
             fisier.write("\n".join(linii))
         messagebox.showinfo("Export reusit", f"Raportul a fost salvat in:\n{cale}")
-
-    def actualizeaza_culori(self) -> None:
-        self.hero.configure(fg_color=self.paleta["panou_moale"])
-        self.cadru_control.configure(fg_color=self.paleta["panou"], border_color=self.paleta["bordura"])
-        self.cadru_tabel_arce.configure(fg_color=self.paleta["fundal_secundar"], border_color=self.paleta["bordura"])
-        self.bara_separator.configure(fg_color=self.paleta["fundal"])
-        self.cadru_canvas.configure(fg_color=self.paleta["panou"])
-        self.cadru_explicatii.configure(fg_color=self.paleta["panou"])
-        self.cadru_legenda.configure(fg_color=self.paleta["panou"])
-        self.text_explicatii.configure(fg_color=self.paleta["fundal_secundar"], border_color=self.paleta["bordura"], text_color=self.paleta["text"])
-        self.titlu_hero.configure(text_color=self.paleta["text"])
-        self.text_hero.configure(text_color=self.paleta["text"])
-        self.label_rezultat.configure(text_color=self.paleta["accent_calduros"])
-        self.label_status.configure(text_color=self.paleta["text_secundar"])
-        self.titlu_explicatii.configure(text_color=self.paleta["text"])
-        self.buton_verificare_finala.configure(
-            fg_color=self.paleta["accent_principal"],
-            hover_color=self.paleta["accent_principal_hover"],
-        )
-        for label, culoare in zip(
-            self.legenda_puncte,
-            [self.paleta["arc_normal"], self.paleta["arc_saturat"], self.paleta["arc_drum"], self.paleta["arc_invers"]],
-        ):
-            label.configure(fg_color=culoare)
 
     def _pregateste_verificare_finala(self) -> None:
         if self.rezultat_curent is None or not self.rezultat_curent.pasi:
