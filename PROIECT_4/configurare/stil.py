@@ -62,9 +62,3 @@ DIMENSIUNI = {
     "inaltime_minima": 800,
     "raza_nod": 28,
 }
-
-VITEZE_ANIMATIE = {
-    "Rapid": 350,
-    "Mediu": 800,
-    "Lent": 1400,
-}
