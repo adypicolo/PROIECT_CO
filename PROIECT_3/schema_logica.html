@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Schema Logica</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Container general */
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Noduri generale */
+        .node {
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 220px;
+            font-size: 14px;
+        }
+
+        /* Tipuri noduri */
+        .startStop {
+            background: #d5e8d4;
+            border: 2px solid #82b366;
+            border-radius: 30px;
+        }
+
+        .inputOutput {
+            background: #fff2cc;
+            border: 2px solid #d6b656;
+            transform: skew(-10deg);
+        }
+
+        .process {
+            background: #dae8fc;
+            border: 2px solid #6c8ebf;
+        }
+
+        .decision {
+            background: #ffe6cc;
+            border: 2px solid #d79b00;
+            transform: rotate(45deg);
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .decision span {
+            transform: rotate(-45deg);
+        }
+
+        /* Săgeți */
+        .arrow {
+            width: 2px;
+            height: 30px;
+            background: black;
+        }
+
+        /* Linie orizontală */
+        .row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .arrow-right {
+            width: 40px;
+            height: 2px;
+            background: black;
+        }
+
+        /* Text mic pentru DA/NU */
+        .label {
+            font-size: 12px;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="flowchart">
+
+        <div class="node startStop">START</div>
+        <div class="arrow"></div>
+
+        <div class="node inputOutput">Citește Matrice, Sursă, Destinație</div>
+        <div class="arrow"></div>
+
+        <div class="decision"><span>Sursă = Destinație?</span></div>
+
+        <div class="row">
+            <div class="label">NU</div>
+            <div class="arrow-right"></div>
+            <div class="node process">Adaugă linie/coloană fictivă</div>
+        </div>
+
+        <div class="arrow"></div>
+
+        <div class="node process">Colțul Nord-Vest</div>
+        <div class="arrow"></div>
+
+        <div class="decision"><span>Degenerat?</span></div>
+
+        <div class="row">
+            <div class="label">DA</div>
+            <div class="arrow-right"></div>
+            <div class="node process">Adaugă Epsilon</div>
+        </div>
+
+        <div class="arrow"></div>
+
+        <div class="node process">Calculează u și v</div>
+        <div class="arrow"></div>
+
+        <div class="node process">Calculează Delta</div>
+        <div class="arrow"></div>
+
+        <div class="decision"><span>Delta ≥ 0?</span></div>
+
+        <div class="row">
+            <div class="label">NU</div>
+            <div class="arrow-right"></div>
+            <div class="node process">Pivot + Ciclu + Theta</div>
+        </div>
+
+        <div class="arrow"></div>
+
+        <div class="node process">Actualizează alocări</div>
+        <div class="arrow"></div>
+
+        <div class="node process">Cost minim</div>
+        <div class="arrow"></div>
+
+        <div class="node inputOutput">Afișare rezultate</div>
+        <div class="arrow"></div>
+
+        <div class="node startStop">STOP</div>
+
+    </div>
+
+</body>
+
+</html>
