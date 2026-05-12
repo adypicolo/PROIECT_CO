@@ -7,17 +7,12 @@ from tkinter import filedialog, messagebox
 import customtkinter as ctk
 
 from ..algoritmi.algoritm_ford_fulkerson import ruleaza_ford_fulkerson
-from ..configurare.constante import (
-    DEFINITII_ARCE_SEMINAR,
-    EXEMPLU_SEMINAR_DESTINATIA,
-    EXEMPLU_SEMINAR_NODURI,
-    EXEMPLU_SEMINAR_SURSA,
-)
 from ..grafuri.desen_graf import deseneaza_graf
 from ..grafuri.graf_date import (
     construieste_graf_din_exemplu,
     construieste_graf_generic,
     genereaza_nume_noduri,
+    parseaza_fisier_exemplu,
     valideaza_numar_intreg,
 )
 from ..modele.modele import Graf, PasAlgoritm, RezultatRulare
@@ -27,12 +22,12 @@ from ..configurare.stil import DIMENSIUNI, FONTURI, PALETA_LUMINOASA
 class AplicatieFordFulkerson(ctk.CTk):
     def __init__(self) -> None:
         super().__init__()
-        self.title("Ford-Fulkerson - aplicatie generala")
+        self.title("Ford-Fulkerson - aplicație generală")
         self.geometry("1460x860")
         self.minsize(DIMENSIUNI["latime_minima"], DIMENSIUNI["inaltime_minima"])
 
         self.rezultat_var = tk.StringVar(value="Flux maxim: -")
-        self.status_var = tk.StringVar(value="Completeaza manual reteaua, apoi genereaza campurile.")
+        self.status_var = tk.StringVar(value="Completează manual rețeaua, apoi generează câmpurile necesare.")
         self.numar_noduri_var = tk.StringVar(value="")
         self.numar_arce_var = tk.StringVar(value="")
         self.sursa_var = tk.StringVar(value="")
@@ -83,8 +78,8 @@ class AplicatieFordFulkerson(ctk.CTk):
         self.destinatie_var.set("")
         self._reface_tabel_arce(0)
         self.scrie_explicatii(
-            "Aplicatia a pornit cu campurile goale.\n"
-            "Completeaza numarul de noduri si numarul de arce, apoi apasa pe butonul de generare."
+            "Aplicația pornește cu toate câmpurile goale.\n"
+            "Introdu numărul de noduri și numărul de arce, apoi apasă butonul de generare pentru a crea rețeaua."
         )
 
     def _construieste_panou_stanga(self, parinte: ctk.CTkFrame) -> None:
@@ -94,7 +89,7 @@ class AplicatieFordFulkerson(ctk.CTk):
         self.titlu_hero.pack(anchor="w", padx=16, pady=(14, 2))
         self.text_hero = ctk.CTkLabel(
             self.hero,
-            text="Introduci din tastatura numarul de noduri, numarul de arce, sursa, destinatia si fiecare arc orientat.",
+            text="Introdu de la tastatură numărul de noduri, numărul de arce, sursa, destinația și fiecare arc orientat al rețelei.",
             wraplength=340,
             justify="left",
             font=FONTURI["normal"],
@@ -118,11 +113,11 @@ class AplicatieFordFulkerson(ctk.CTk):
         self._adauga_butoane_actiune()
 
     def _adauga_config_retea(self) -> None:
-        ctk.CTkLabel(self.cadru_control, text="Configurare retea", font=FONTURI["subtitlu"], text_color=self.paleta["text"]).grid(
+        ctk.CTkLabel(self.cadru_control, text="Configurare rețea", font=FONTURI["subtitlu"], text_color=self.paleta["text"]).grid(
             row=0, column=0, columnspan=2, sticky="w", padx=14, pady=(14, 8)
         )
 
-        ctk.CTkLabel(self.cadru_control, text="Numar noduri", font=FONTURI["normal_bold"], text_color=self.paleta["text"]).grid(
+        ctk.CTkLabel(self.cadru_control, text="Număr noduri", font=FONTURI["normal_bold"], text_color=self.paleta["text"]).grid(
             row=1, column=0, sticky="w", padx=14, pady=(0, 4)
         )
         self.camp_numar_noduri = ctk.CTkEntry(
@@ -135,7 +130,7 @@ class AplicatieFordFulkerson(ctk.CTk):
         )
         self.camp_numar_noduri.grid(row=2, column=0, padx=14, pady=(0, 8), sticky="we")
 
-        ctk.CTkLabel(self.cadru_control, text="Numar arce", font=FONTURI["normal_bold"], text_color=self.paleta["text"]).grid(
+        ctk.CTkLabel(self.cadru_control, text="Număr arce", font=FONTURI["normal_bold"], text_color=self.paleta["text"]).grid(
             row=1, column=1, sticky="w", padx=14, pady=(0, 4)
         )
         self.camp_numar_arce = ctk.CTkEntry(
@@ -150,7 +145,7 @@ class AplicatieFordFulkerson(ctk.CTk):
 
         self.buton_genereaza = ctk.CTkButton(
             self.cadru_control,
-            text="Genereaza campurile retelei",
+            text="Generează câmpurile rețelei",
             command=self.genereaza_formular_retea,
             fg_color=self.paleta["accent_calduros"],
             hover_color=self.paleta["accent_calduros_hover"],
@@ -158,10 +153,10 @@ class AplicatieFordFulkerson(ctk.CTk):
         )
         self.buton_genereaza.grid(row=3, column=0, columnspan=2, padx=14, pady=(0, 10), sticky="we")
 
-        ctk.CTkLabel(self.cadru_control, text="Sursa", font=FONTURI["normal_bold"], text_color=self.paleta["text"]).grid(
+        ctk.CTkLabel(self.cadru_control, text="Sursă", font=FONTURI["normal_bold"], text_color=self.paleta["text"]).grid(
             row=4, column=0, sticky="w", padx=14, pady=(0, 4)
         )
-        ctk.CTkLabel(self.cadru_control, text="Destinatie", font=FONTURI["normal_bold"], text_color=self.paleta["text"]).grid(
+        ctk.CTkLabel(self.cadru_control, text="Destinație", font=FONTURI["normal_bold"], text_color=self.paleta["text"]).grid(
             row=4, column=1, sticky="w", padx=14, pady=(0, 4)
         )
         self.selector_sursa = ctk.CTkOptionMenu(
@@ -210,7 +205,7 @@ class AplicatieFordFulkerson(ctk.CTk):
         baza = 8
         self.buton_exemplu = ctk.CTkButton(
             self.cadru_control,
-            text="Incarca exemplu seminar",
+            text="Set date prezentare",
             command=self.incarca_exemplu_seminar,
             fg_color=self.paleta["panou_moale"],
             hover_color=self.paleta["accent_calduros"],
@@ -220,7 +215,7 @@ class AplicatieFordFulkerson(ctk.CTk):
 
         self.buton_construieste = ctk.CTkButton(
             self.cadru_control,
-            text="Construieste graful",
+            text="Construiește graful",
             command=self.construieste_graf_din_input,
             fg_color=self.paleta["accent_calduros"],
             hover_color=self.paleta["accent_calduros_hover"],
@@ -230,7 +225,7 @@ class AplicatieFordFulkerson(ctk.CTk):
 
         self.buton_ruleaza = ctk.CTkButton(
             self.cadru_control,
-            text="Ruleaza algoritmul",
+            text="Pornește algoritmul",
             command=self.ruleaza_automat,
             fg_color=self.paleta["accent_principal"],
             hover_color=self.paleta["accent_principal_hover"],
@@ -240,7 +235,7 @@ class AplicatieFordFulkerson(ctk.CTk):
 
         self.buton_pas_inapoi = ctk.CTkButton(
             self.cadru_control,
-            text="Pas inapoi",
+            text="Pas înapoi",
             command=self.pas_inapoi,
             fg_color=self.paleta["panou_moale"],
             hover_color=self.paleta["accent_calduros"],
@@ -250,7 +245,7 @@ class AplicatieFordFulkerson(ctk.CTk):
 
         self.buton_pas_inainte = ctk.CTkButton(
             self.cadru_control,
-            text="Pas inainte",
+            text="Pas înainte",
             command=self.pas_inainte,
             fg_color=self.paleta["panou_moale"],
             hover_color=self.paleta["accent_calduros"],
@@ -260,7 +255,7 @@ class AplicatieFordFulkerson(ctk.CTk):
 
         self.buton_reset = ctk.CTkButton(
             self.cadru_control,
-            text="Reset",
+            text="Resetează",
             command=self.reseteaza_stare,
             fg_color=self.paleta["panou_moale"],
             hover_color=self.paleta["accent_calduros"],
@@ -270,7 +265,7 @@ class AplicatieFordFulkerson(ctk.CTk):
 
         self.buton_export = ctk.CTkButton(
             self.cadru_control,
-            text="Export raport",
+            text="Exportă raportul",
             command=self.exporta_raport,
             fg_color=self.paleta["accent_calduros"],
             hover_color=self.paleta["accent_calduros_hover"],
@@ -338,7 +333,7 @@ class AplicatieFordFulkerson(ctk.CTk):
         self.cadru_explicatii = ctk.CTkFrame(continut, fg_color=self.paleta["panou"], corner_radius=18, height=160)
         self.cadru_explicatii.grid(row=2, column=0, sticky="ew")
         self.cadru_explicatii.pack_propagate(False)
-        self.titlu_explicatii = ctk.CTkLabel(self.cadru_explicatii, text="Explicatii pas cu pas", font=FONTURI["subtitlu"], text_color=self.paleta["text"])
+        self.titlu_explicatii = ctk.CTkLabel(self.cadru_explicatii, text="Explicații pas cu pas", font=FONTURI["subtitlu"], text_color=self.paleta["text"])
         self.titlu_explicatii.pack(anchor="w", padx=16, pady=(16, 6))
         self.text_explicatii = ctk.CTkTextbox(
             self.cadru_explicatii,
@@ -455,11 +450,11 @@ class AplicatieFordFulkerson(ctk.CTk):
         self.text_verificare_finala = ""
         self.buton_verificare_finala.configure(state="disabled")
         self._reface_tabel_arce(numar_arce)
-        self.status_var.set("Completeaza sursa, destinatia si fiecare arc al retelei.")
+        self.status_var.set("Completează sursa, destinația și fiecare arc al rețelei.")
         self.rezultat_var.set("Flux maxim: -")
         self.scrie_explicatii(
-            "Reteaua generala a fost pregatita.\n"
-            "Pentru fiecare arc completezi: nod sursa, nod destinatie, capacitate si o eticheta optionala."
+            "Rețeaua generală a fost pregătită.\n"
+            "Pentru fiecare arc introduci: nodul sursă, nodul destinație, capacitatea și, opțional, o etichetă."
         )
 
     def _reface_tabel_arce(self, numar_arce: int, valori_implicite: list[dict[str, str]] | None = None) -> None:
@@ -467,7 +462,7 @@ class AplicatieFordFulkerson(ctk.CTk):
             widget.destroy()
         self.linii_arce.clear()
 
-        antete = [("Start", 84), ("Final", 84), ("Capacitate", 90), ("Eticheta", 82)]
+        antete = [("Start", 84), ("Final", 84), ("Capacitate", 90), ("Etichetă", 82)]
         for coloana, (text, latime) in enumerate(antete):
             ctk.CTkLabel(
                 self.cadru_tabel_arce,
@@ -566,7 +561,7 @@ class AplicatieFordFulkerson(ctk.CTk):
                 sursa=self.sursa_var.get(),
                 destinatie=self.destinatie_var.get(),
                 linii_arce=self.citeste_arce_din_tabel(),
-                titlu="Retea generala - Ford-Fulkerson",
+                titlu="Rețea generală - Ford-Fulkerson",
             )
         except ValueError as exc:
             messagebox.showerror("Date invalide", str(exc))
@@ -582,47 +577,69 @@ class AplicatieFordFulkerson(ctk.CTk):
         )
         self.afiseaza_graf_fara_pasi()
         self.scrie_explicatii(
-            "Graful este acum complet general.\n"
-            "Nu mai depinde de a, b, c ... si poate fi construit pentru orice numar de noduri si arce."
+            "Graful este acum complet generalizat.\n"
+            "Acesta nu mai depinde de valori fixe precum a, b, c etc., putând fi construit pentru orice număr de noduri și arce."
         )
 
     def incarca_exemplu_seminar(self) -> None:
-        self.noduri_curente = list(EXEMPLU_SEMINAR_NODURI)
-        self.numar_noduri_var.set(str(len(EXEMPLU_SEMINAR_NODURI)))
-        self.numar_arce_var.set(str(len(DEFINITII_ARCE_SEMINAR)))
-        self.sursa_var.set(EXEMPLU_SEMINAR_SURSA)
-        self.destinatie_var.set(EXEMPLU_SEMINAR_DESTINATIA)
+        cale_fisier = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "exemple", "seminar.txt")
+        if not os.path.isfile(cale_fisier):
+            messagebox.showerror("Fișier inexistent", f"Nu s-a găsit fișierul:\n{cale_fisier}")
+            return
+
+        try:
+            date = parseaza_fisier_exemplu(cale_fisier)
+        except ValueError as exc:
+            messagebox.showerror("Eroare la citire", str(exc))
+            return
+
+        noduri_exemplu = date["noduri"]
+        sursa_exemplu = date["sursa"]
+        destinatie_exemplu = date["destinatie"]
+        arce_exemplu = date["arce"]
+
+        self.noduri_curente = list(noduri_exemplu)
+        self.numar_noduri_var.set(str(len(noduri_exemplu)))
+        self.numar_arce_var.set(str(len(arce_exemplu)))
+        self.sursa_var.set(sursa_exemplu)
+        self.destinatie_var.set(destinatie_exemplu)
         self.selector_sursa.configure(values=self.noduri_curente)
         self.selector_destinatie.configure(values=self.noduri_curente)
         self._reface_tabel_arce(
-            len(DEFINITII_ARCE_SEMINAR),
+            len(arce_exemplu),
             [
                 {
-                    "sursa": arc["sursa"],
-                    "destinatie": arc["destinatie"],
+                    "sursa": str(arc["sursa"]),
+                    "destinatie": str(arc["destinatie"]),
                     "capacitate": str(arc["capacitate"]),
                     "eticheta": str(arc["eticheta"]),
                 }
-                for arc in DEFINITII_ARCE_SEMINAR
+                for arc in arce_exemplu
             ],
         )
         self.graf_curent = construieste_graf_din_exemplu(
-            noduri_exemplu=EXEMPLU_SEMINAR_NODURI,
-            sursa=EXEMPLU_SEMINAR_SURSA,
-            destinatie=EXEMPLU_SEMINAR_DESTINATIA,
-            arce_exemplu=DEFINITII_ARCE_SEMINAR,
-            titlu="Exemplu seminar - retea preincarcata",
+            noduri_exemplu=noduri_exemplu,
+            sursa=sursa_exemplu,
+            destinatie=destinatie_exemplu,
+            arce_exemplu=arce_exemplu,
+            titlu="Exemplu seminar - rețea din fișier",
         )
-        self.rezultat_curent = None
+
+        # Rulează automat algoritmul Ford-Fulkerson pe datele citite
+        self.rezultat_curent = ruleaza_ford_fulkerson(self.graf_curent)
         self.index_pas_curent = 0
-        self.text_verificare_finala = ""
-        self.buton_verificare_finala.configure(state="disabled")
-        self.rezultat_var.set("Flux maxim: -")
-        self.status_var.set("Exemplul de seminar a fost incarcat. Poti rula automat sau, separat, modul seminar.")
-        self.afiseaza_graf_fara_pasi()
+        self._pregateste_verificare_finala()
+        self.rezultat_var.set(f"Flux maxim: {self.rezultat_curent.flux_maxim}")
+        self.status_var.set("Exemplul seminar a fost încărcat din fișier și rezolvat automat.")
+        self.afiseaza_pas_curent()
         self.scrie_explicatii(
-            "Exemplul de seminar este doar o incarcare rapida.\n"
-            "Fluxul general al aplicatiei ramane acum unul generic, bazat pe numar de noduri si arce."
+            f"Datele au fost citite din fișierul seminar.txt:\n"
+            f"  • Noduri: {len(noduri_exemplu)}\n"
+            f"  • Arce: {len(arce_exemplu)}\n"
+            f"  • Sursă: {sursa_exemplu}, Destinație: {destinatie_exemplu}\n\n"
+            f"Algoritmul Ford-Fulkerson a fost rulat automat.\n"
+            f"Fluxul maxim obținut: {self.rezultat_curent.flux_maxim}.\n"
+            f"Folosește butoanele Pas înainte / Pas înapoi pentru a parcurge rezolvarea."
         )
 
     def afiseaza_graf_fara_pasi(self) -> None:
@@ -630,7 +647,7 @@ class AplicatieFordFulkerson(ctk.CTk):
             return
         pas_gol = PasAlgoritm(
             iteratie=0,
-            titlu="Graful initial",
+            titlu="Graful inițial",
             fluxuri_dupa_pas={(arc.sursa, arc.destinatie): 0 for arc in self.graf_curent.arce},
         )
         deseneaza_graf(self.canvas_graf, self.graf_curent, pas_gol, self.paleta)
@@ -643,7 +660,7 @@ class AplicatieFordFulkerson(ctk.CTk):
         self.index_pas_curent = 0
         self._pregateste_verificare_finala()
         self.rezultat_var.set(f"Flux maxim: {self.rezultat_curent.flux_maxim}")
-        self.status_var.set("Mod automat activ: reteaua este rezolvata general cu BFS in graful rezidual.")
+        self.status_var.set("Mod automat activ: rețeaua este rezolvată general cu BFS in graful rezidual.")
         self.afiseaza_pas_curent()
 
     def afiseaza_pas_curent(self) -> None:
@@ -657,7 +674,7 @@ class AplicatieFordFulkerson(ctk.CTk):
         self.scrie_explicatii(pas.explicatie)
         self.rezultat_var.set(f"Flux maxim: {self.rezultat_curent.flux_maxim} | Pas curent: {pas.iteratie}")
         if pas.este_pas_final and pas.formula_taietura:
-            self.status_var.set("Algoritmul s-a incheiat. Apasa pe butonul de verificare finala.")
+            self.status_var.set("Algoritmul s-a încheiat. Apasă pe butonul de verificare finală.")
 
     def scrie_explicatii(self, text: str) -> None:
         self.text_explicatii.configure(state="normal")
@@ -667,7 +684,7 @@ class AplicatieFordFulkerson(ctk.CTk):
 
     def pas_inainte(self) -> None:
         if self.rezultat_curent is None:
-            self.scrie_explicatii("Nu exista pasi salvati. Ruleaza mai intai unul dintre moduri.")
+            self.scrie_explicatii("Nu există pași salvați. Rulează mai întâi unul dintre modurile disponibile.")
             return
         if self.index_pas_curent < len(self.rezultat_curent.pasi) - 1:
             self.index_pas_curent += 1
@@ -675,7 +692,7 @@ class AplicatieFordFulkerson(ctk.CTk):
 
     def pas_inapoi(self) -> None:
         if self.rezultat_curent is None:
-            self.scrie_explicatii("Nu exista pasi salvati. Ruleaza mai intai unul dintre moduri.")
+            self.scrie_explicatii("Nu există pași salvați. Rulează mai întâi unul dintre modurile disponibile.")
             return
         if self.index_pas_curent > 0:
             self.index_pas_curent -= 1
@@ -689,15 +706,15 @@ class AplicatieFordFulkerson(ctk.CTk):
         self.rezultat_var.set("Flux maxim: -")
         if self.graf_curent is not None:
             self.afiseaza_graf_fara_pasi()
-        self.status_var.set("Fluxurile au fost resetate. Graful ramane incarcat.")
-        self.scrie_explicatii("Reset reusit. Poti rula din nou pe aceeasi retea sau o poti modifica.")
+        self.status_var.set("Fluxurile au fost resetate. Graful rămâne încărcat.")
+        self.scrie_explicatii("Reset reușit. Poți rula din nou pe aceeași rețea sau o poți modifica.")
 
     def exporta_raport(self) -> None:
         if self.rezultat_curent is None:
-            messagebox.showwarning("Nimic de exportat", "Ruleaza mai intai o metoda.")
+            messagebox.showwarning("Nimic de exportat", "Rulează mai întâi o metodă.")
             return
         cale = filedialog.asksaveasfilename(
-            title="Salveaza raportul",
+            title="Salvează raportul",
             defaultextension=".md",
             filetypes=[("Markdown", "*.md"), ("Text", "*.txt")],
             initialdir=os.path.dirname(os.path.abspath(__file__)),
@@ -710,31 +727,31 @@ class AplicatieFordFulkerson(ctk.CTk):
             "",
             f"- Mod de rulare: {self.rezultat_curent.mod_rulare}",
             f"- Flux maxim: {self.rezultat_curent.flux_maxim}",
-            f"- Numar noduri: {len(self.graf_curent.noduri) if self.graf_curent else 0}",
-            f"- Numar arce: {len(self.graf_curent.arce) if self.graf_curent else 0}",
-            f"- Sursa: {self.graf_curent.sursa if self.graf_curent else '-'}",
-            f"- Destinatie: {self.graf_curent.destinatie if self.graf_curent else '-'}",
-            f"- Formula taieturii: {self.rezultat_curent.formula_taietura or '-'}",
+            f"- Număr noduri: {len(self.graf_curent.noduri) if self.graf_curent else 0}",
+            f"- Număr arce: {len(self.graf_curent.arce) if self.graf_curent else 0}",
+            f"- Sursă: {self.graf_curent.sursa if self.graf_curent else '-'}",
+            f"- Destinație: {self.graf_curent.destinatie if self.graf_curent else '-'}",
+            f"- Formula tăieturii: {self.rezultat_curent.formula_taietura or '-'}",
             "",
-            "## Pasi",
+            "## Pași",
             "",
         ]
         for pas in self.rezultat_curent.pasi:
             linii.append(f"### {pas.titlu}")
-            linii.append(f"- Iteratie: {pas.iteratie}")
+            linii.append(f"- Iterație: {pas.iteratie}")
             linii.append(f"- Flux: {pas.flux_inainte} -> {pas.flux_dupa}")
             if pas.drum_crestere:
-                linii.append(f"- Drum de crestere: {' -> '.join(pas.drum_crestere)}")
+                linii.append(f"- Drum de creștere: {' -> '.join(pas.drum_crestere)}")
             if pas.capacitati_reziduale:
-                linii.append(f"- Capacitatile reziduale: {pas.capacitati_reziduale}")
+                linii.append(f"- Capacitățile reziduale: {pas.capacitati_reziduale}")
             if pas.formula_taietura:
-                linii.append(f"- Taietura minima: {pas.formula_taietura}")
+                linii.append(f"- Tăietura minimă: {pas.formula_taietura}")
             linii.append("")
             linii.append(pas.explicatie)
             linii.append("")
         with open(cale, "w", encoding="utf-8") as fisier:
             fisier.write("\n".join(linii))
-        messagebox.showinfo("Export reusit", f"Raportul a fost salvat in:\n{cale}")
+        messagebox.showinfo("Export reușit", f"Raportul a fost salvat în:\n{cale}")
 
     def _pregateste_verificare_finala(self) -> None:
         if self.rezultat_curent is None or not self.rezultat_curent.pasi:
@@ -746,9 +763,9 @@ class AplicatieFordFulkerson(ctk.CTk):
         if pas_final.formula_taietura:
             self.text_verificare_finala = (
                 f"Flux maxim: {self.rezultat_curent.flux_maxim}\n"
-                f"Formula taieturii minime: {pas_final.formula_taietura}\n"
-                f"Multimea S: {', '.join(pas_final.multime_s) or '-'}\n"
-                f"Multimea T: {', '.join(pas_final.multime_t) or '-'}\n\n"
+                f"Formula tăieturii minime: {pas_final.formula_taietura}\n"
+                f"Mulțimea S: {', '.join(pas_final.multime_s) or '-'}\n"
+                f"Mulțimea T: {', '.join(pas_final.multime_t) or '-'}\n\n"
                 f"{pas_final.explicatie}"
             )
             self.buton_verificare_finala.configure(state="normal")
@@ -758,18 +775,18 @@ class AplicatieFordFulkerson(ctk.CTk):
 
     def afiseaza_casuta_verificare(self) -> None:
         if not self.text_verificare_finala:
-            messagebox.showinfo("Verificare finala", "Nu exista inca o verificare finala disponibila.")
+            messagebox.showinfo("Verificare finală", "Nu există încă o verificare finală disponibilă.")
             return
 
         fereastra = ctk.CTkToplevel(self)
-        fereastra.title("Verificare finala")
+        fereastra.title("Verificare finală")
         fereastra.geometry("620x420")
         fereastra.configure(fg_color=self.paleta["panou"])
         fereastra.attributes("-topmost", True)
 
         ctk.CTkLabel(
             fereastra,
-            text="Verificare finala",
+            text="Verificare finală",
             font=FONTURI["subtitlu"],
             text_color=self.paleta["text"],
         ).pack(anchor="w", padx=18, pady=(18, 8))

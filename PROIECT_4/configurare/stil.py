@@ -48,13 +48,13 @@ PALETA_INTUNECATA = {
 }
 
 FONTURI = {
-    "titlu": ("Segoe UI", 28, "bold"),
-    "subtitlu": ("Segoe UI", 18, "bold"),
-    "normal": ("Segoe UI", 13),
-    "normal_bold": ("Segoe UI", 13, "bold"),
-    "mic": ("Segoe UI", 11),
-    "graf_nod": ("Segoe UI", 12, "bold"),
-    "graf_eticheta": ("Segoe UI", 10, "bold"),
+    "titlu": ("League Spartan ExtraBold", 28, "bold"),
+    "subtitlu": ("League Spartan ExtraBold", 18, "bold"),
+    "normal": ("Montserrat", 13),
+    "normal_bold": ("Montserrat", 13, "bold"),
+    "mic": ("Montserrat", 11),
+    "graf_nod": ("Montserrat", 12, "bold"),
+    "graf_eticheta": ("Montserrat", 10, "bold"),
 }
 
 DIMENSIUNI = {
